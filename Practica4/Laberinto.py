@@ -11,24 +11,50 @@ def Laberinto(laberinto):
             if laberinto[fila][columna]=="I":
                 posR = fila
                 posC = columna
-    origen=(posC,posR)
+    origen=(posR,posC)
    
     raiz = Arbol(None,-1,origen)
     frontera = [raiz]
     visitados = []
+    
 
     while frontera:# si frontera aun tiene hijos
         nodo = frontera.pop(0)#Sacamos siempre el primero de la frontera  
         posR,posC=nodo.elemento
-        if laberinto[posR][posC] == "S":#Se regresa el arbol desmenuzado cuando se encontro el destino
+        if laberinto[posR][posC] == 'S':#Se regresa el arbol desmenuzado cuando se encontro el destino
             print("Arbol generado")
             print (raiz)
             return nodo.rutaNodoRaiz()#Se regresa la ruta segun el metodo del profe
         if not (nodo.elemento in visitados):
-            
-
-
-            
+            try:
+                if(laberinto[posR][posC-1]!='X'):#Izquierda
+                    elemento = (posR,posC-1)
+                    raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
+                    frontera.append(Arbol(nodo,nodo.nivel,elemento))                
+            except:
+                pass
+            try:
+                if(laberinto[posR+1][posC]!='X'):#Abajo
+                    elemento = (posR+1,posC)
+                    raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
+                    frontera.append(Arbol(nodo,nodo.nivel,elemento))                
+            except:
+                pass
+            try:
+                if(laberinto[posR][posC+1]!='X'):#derecha
+                    elemento = (posR,posC+1)
+                    raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
+                    frontera.append(Arbol(nodo,nodo.nivel,elemento))
+            except:
+                pass
+            try:
+                if(laberinto[posR-1][posC]!='X'):#Arriba
+                    elemento = (posR-1,posC)
+                    raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
+                    frontera.append(Arbol(nodo,nodo.nivel,elemento)) 
+            except:
+                pass
+                       
             visitados.append(nodo.elemento)
     return None
 
