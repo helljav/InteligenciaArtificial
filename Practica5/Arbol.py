@@ -46,5 +46,5 @@ class Arbol:
         ruta = [nodo.elemento]
         while nodo.padre != None:
             nodo = nodo.padre
-            ruta.append(nodo.elemento[0])
+            ruta.append(nodo.elemento)
         return ruta
