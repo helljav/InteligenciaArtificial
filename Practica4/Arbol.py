@@ -43,7 +43,7 @@ class Arbol:
 
     def rutaNodoRaiz(self):
         nodo = self
-        ruta = [nodo.elemento]
+        ruta = [nodo.elemento[0]]
         while nodo.padre != None:
             nodo = nodo.padre
             ruta.append(nodo.elemento[0])

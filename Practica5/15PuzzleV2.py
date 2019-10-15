@@ -7,22 +7,22 @@ def heuristica(actual,objetivo):
         for j in range(0,len(actual[i])):
             if actual[i][j]!=objetivo[i][j]:
                 h +=1 
-    return h
-
-def determinaPos(origen):
-    posF = 0
-    posC = 0
-    for fila in range(0,len(origen)):
-        for columna in range(0,len(origen[fila])):
-            if origen[fila][columna] == 0 :
-                posF = fila
-                posC = columna
-    return posF,posC
+    return h    
 
 
 
 def PUZZLE(origen, destino):
-    raiz = Arbol(None,-1,(origen,0))
+    posR = 0
+    posC = 0
+    for fila in range(0,len(origen)):
+        for columna in range(0,len(origen[fila])):
+            if origen[fila][columna] == 0 :
+                posR = fila
+                posC = columna
+    
+
+    heuri = heuristica(origen,destino)
+    raiz = Arbol(None,-1,(origen,heuri,posR,posC))
     frontera = [raiz]
     visitados = []
     
@@ -43,9 +43,10 @@ def PUZZLE(origen, destino):
         nodo = frontera.pop(menor)
         nodoE = nodo.elemento[0]
         nodoH = nodo.elemento[1]
-        posR, posC = determinaPos(nodoE) #Determina donde esta el cero en este nodo 
-
-        if nodoE == destino:
+        posR = nodo.elemento[2]
+        posC = nodo.elemento[3]
+        
+        if nodoE == destino and nodoH==0:
             print("Arbol generado")
             print (raiz)
             return nodo.rutaNodoRaiz()
@@ -62,9 +63,8 @@ def PUZZLE(origen, destino):
                     
                     sinVisitar[posR][posC] = varAux
                     nodoEHeuristica = heuristica(sinVisitar,destino)
-                    
                         
-                    elemento = (sinVisitar,nodoEHeuristica)
+                    elemento = (sinVisitar,nodoEHeuristica,posR,posC-1)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))                
             except:
@@ -79,7 +79,7 @@ def PUZZLE(origen, destino):
                     sinVisitar[posR][posC] = varAux
                     nodoEHeuristica = heuristica(sinVisitar,destino)
                     
-                    elemento = (sinVisitar,nodoEHeuristica)
+                    elemento = (sinVisitar,nodoEHeuristica,posR+1,posC)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))                
             except:
@@ -94,7 +94,7 @@ def PUZZLE(origen, destino):
                     nodoEHeuristica = heuristica(sinVisitar,destino)
                     
 
-                    elemento = (sinVisitar,nodoEHeuristica)
+                    elemento = (sinVisitar,nodoEHeuristica,posR,posC+1)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))
             except:
@@ -109,7 +109,7 @@ def PUZZLE(origen, destino):
                     nodoEHeuristica = heuristica(sinVisitar,destino)
                     
 
-                    elemento = (sinVisitar,nodoEHeuristica)
+                    elemento = (sinVisitar,nodoEHeuristica,posR-1,posC)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))
                     
@@ -123,17 +123,14 @@ def PUZZLE(origen, destino):
     return None
 
 
-
 """ *************************************************************************************************"""
 
 #puzzleOrigen = [[1,2,3],[0,8,6],[7,5,4]]
 #puzzleDestino = [[1,2,3],[4,5,6],[7,8,0]]
 puzzleOrigen = [[1,2,3,11],[7,8,10,13],[6,9,15,4],[12,14,0,5]]
 puzzleDestino = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
-# puzzleOrigen = [[3,0],[1,2]]
+# puzzleOrigen = [[2,1],[0,3]]
 # puzzleDestino = [[1,2],[3,0]]
-
-
 
 
 ruta = PUZZLE(puzzleOrigen, puzzleDestino)
