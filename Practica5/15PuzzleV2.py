@@ -1,3 +1,17 @@
+"""
+*****************************************************************************************************
+
+                                UNIVERSIDAD AUTONOMA METROPOLITANA
+                                
+    ALUMNO: CARRILLO PACHECO FRANCISCO JAVIER
+    MATRICULA: 2143008102
+    PRACTICA 5, Simulacion del juego 15 Puzzle con el algoritmo Gloton
+
+
+
+
+******************************************************************************************************
+"""
 import copy
 from Arbol import Arbol
 
@@ -22,6 +36,9 @@ def PUZZLE(origen, destino):
     
 
     heuri = heuristica(origen,destino)
+
+
+    
     raiz = Arbol(None,-1,(origen,heuri,posR,posC))
     frontera = [raiz]
     visitados = []
@@ -32,19 +49,14 @@ def PUZZLE(origen, destino):
         menor = -1
         for i in range(len(frontera)):
             nodo = frontera[i]
-            nodoElemento = nodo.elemento[0]
             nodoHeuristica = nodo.elemento[1]
-            nodoHeuristica = heuristica(nodoElemento,destino)
             if nodoHeuristica < menorHeuristica:
                 menorHeuristica = nodoHeuristica
                 menor = i
 
         
         nodo = frontera.pop(menor)
-        nodoE = nodo.elemento[0]
-        nodoH = nodo.elemento[1]
-        posR = nodo.elemento[2]
-        posC = nodo.elemento[3]
+        nodoE, nodoH, posR, posC = nodo.elemento       
         
         if nodoE == destino and nodoH==0:
             print("Arbol generado")
@@ -54,71 +66,54 @@ def PUZZLE(origen, destino):
 
         if not (nodo.elemento in visitados):
             try:
-                if(nodoE[posR][posC-1]!=0):#Izquierda
-                    
-                    sinVisitar = copy.deepcopy(nodoE)             
-
+                if(nodoE[posR][posC-1]!=0):#Izquierda                    
+                    sinVisitar = copy.deepcopy(nodoE)            
                     varAux = sinVisitar[posR][posC-1]
-                    sinVisitar[posR][posC-1] = 0
-                    
+                    sinVisitar[posR][posC-1] = 0                    
                     sinVisitar[posR][posC] = varAux
-                    nodoEHeuristica = heuristica(sinVisitar,destino)
-                        
+                    nodoEHeuristica = heuristica(sinVisitar,destino)                        
                     elemento = (sinVisitar,nodoEHeuristica,posR,posC-1)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))                
             except:
                 pass
             try:
-                if(nodoE[posR+1][posC]!=0):#Abajo
-                    
-
+                if(nodoE[posR+1][posC]!=0):#Abajo                    
                     sinVisitar = copy.deepcopy(nodoE)
                     varAux = sinVisitar[posR+1][posC]
                     sinVisitar[posR+1][posC] = 0
                     sinVisitar[posR][posC] = varAux
                     nodoEHeuristica = heuristica(sinVisitar,destino)
-                    
                     elemento = (sinVisitar,nodoEHeuristica,posR+1,posC)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))                
             except:
                 pass
             try:
-                if(nodoE[posR][posC+1]!=0):#derecha
-                    
+                if(nodoE[posR][posC+1]!=0):#derecha                   
                     sinVisitar = copy.deepcopy(nodoE)
                     varAux = sinVisitar[posR][posC+1]
                     sinVisitar[posR][posC+1] = 0
                     sinVisitar[posR][posC] = varAux
                     nodoEHeuristica = heuristica(sinVisitar,destino)
-                    
-
                     elemento = (sinVisitar,nodoEHeuristica,posR,posC+1)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))
             except:
                 pass
             try:
-                if(nodoE[posR-1][posC]!=0):#Arriba
-                    
+                if(nodoE[posR-1][posC]!=0):#Arriba                    
                     sinVisitar = copy.deepcopy(nodoE)
                     varAux = sinVisitar[posR-1][posC]
                     sinVisitar[posR-1][posC] = 0
                     sinVisitar[posR][posC] = varAux
                     nodoEHeuristica = heuristica(sinVisitar,destino)
-                    
-
                     elemento = (sinVisitar,nodoEHeuristica,posR-1,posC)
                     raiz.agregar(nodo.elemento,nodo.nivel,elemento)#Se va agregando un hijo al nodo padre(nodo donde si huboc enexion)
                     frontera.append(Arbol(nodo,nodo.nivel,elemento))
                     
             except:
                 pass
-            
-
-
-           
             visitados.append(nodo.elemento)
     return None
 
